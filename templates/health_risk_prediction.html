@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Health Risk Prediction | HealthCare{% endblock %}
+{% block page_title %}Health Risk Prediction{% endblock %}
+
+{% block extra_css %}
+<style>
+.risk-page { max-width: 1120px; margin: 0 auto; }
+.risk-intro { background: linear-gradient(135deg, #e7f5fb, #f7fbff); border: 1px solid #d6e5ef; border-radius: 18px; padding: 24px; margin-bottom: 22px; }
+.risk-intro h2 { margin: 0 0 8px; color: #063a61; font-size: 23px; }
+.risk-intro p { margin: 0; color: #526a7c; line-height: 1.65; }
+.risk-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .85fr); gap: 22px; align-items: start; }
+.risk-card { background: #fff; border: 1px solid #d6e5ef; border-radius: 16px; padding: 24px; box-shadow: 0 5px 20px rgba(6,58,97,.04); }
+.risk-card h3 { margin: 0 0 6px; color: #063a61; font-size: 19px; }
+.risk-subtitle { color: #718395; font-size: 13px; margin: 0 0 22px; line-height: 1.5; }
+.risk-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
+.risk-field label { display: block; font-weight: 600; color: #30495d; font-size: 13px; margin-bottom: 8px; }
+.risk-field input, .risk-field select { width: 100%; box-sizing: border-box; padding: 12px 13px; border: 1px solid #d6e5ef; border-radius: 9px; background: #fff; color: #20384a; font: inherit; outline: none; }
+.risk-field input:focus, .risk-field select:focus { border-color: #0879a8; box-shadow: 0 0 0 3px rgba(8,121,168,.10); }
+.risk-hint { display: block; margin-top: 6px; font-size: 11px; color: #8192a0; }
+.risk-submit { border: 0; border-radius: 10px; background: #0879a8; color: #fff; padding: 13px 18px; font-weight: 700; cursor: pointer; margin-top: 22px; width: 100%; font-size: 14px; }
+.risk-submit:hover { background: #063a61; }
+.result-card { border-radius: 14px; padding: 20px; background: #f3f8fc; border: 1px solid #d6e5ef; margin-top: 18px; }
+.result-card h4 { margin: 0 0 14px; color: #063a61; }
+.risk-result { display: inline-block; padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; }
+.risk-low { color: #08774d; background: #dff7eb; }
+.risk-moderate { color: #946200; background: #fff1c7; }
+.risk-high { color: #a52e2e; background: #ffe1e1; }
+.result-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.result-metric { background: #fff; border: 1px solid #e0eaf1; padding: 12px; border-radius: 10px; }
+.result-metric span { display: block; color: #7a8b99; font-size: 11px; margin-bottom: 5px; }
+.result-metric strong { color: #063a61; font-size: 19px; }
+.risk-disclaimer { margin-top: 18px; padding: 13px 14px; border-left: 3px solid #e0a12c; background: #fff9e9; color: #73591f; font-size: 12px; line-height: 1.6; border-radius: 7px; }
+.risk-history { margin-top: 22px; }
+.history-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #edf2f6; font-size: 13px; }
+.history-row:last-child { border-bottom: 0; }
+.history-date { display: block; color: #8493a0; font-size: 11px; margin-top: 4px; }
+.empty-history { color: #8192a0; font-size: 13px; line-height: 1.6; }
+@media (max-width: 780px) { .risk-layout { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .risk-card, .risk-intro { padding: 17px; } .risk-form-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="risk-page">
+    <div class="risk-intro">
+        <h2>Health Risk Prediction</h2>
+        <p>Enter the requested details to see an educational machine-learning risk category. Your latest predictions are saved to your HealthCare account when MongoDB is available.</p>
+    </div>
+
+    <div class="risk-layout">
+        <section class="risk-card">
+            <h3>Enter Health Details</h3>
+            <p class="risk-subtitle">Please use recent measurements where available. All fields are required.</p>
+
+            <form method="POST" action="{{ url_for('health_risk_prediction') }}">
+                <div class="risk-form-grid">
+                    <div class="risk-field">
+                        <label for="age">Age (years)</label>
+                        <input id="age" name="age" type="number" min="1" max="120" required value="{{ form_data.age }}" placeholder="e.g. 35">
+                    </div>
+                    <div class="risk-field">
+                        <label for="bmi">BMI</label>
+                        <input id="bmi" name="bmi" type="number" min="10" max="80" step="0.1" required value="{{ form_data.bmi }}" placeholder="e.g. 23.5">
+                        <span class="risk-hint">Body Mass Index</span>
+                    </div>
+                    <div class="risk-field">
+                        <label for="systolic_bp">Systolic Blood Pressure (mmHg)</label>
+                        <input id="systolic_bp" name="systolic_bp" type="number" min="50" max="300" required value="{{ form_data.systolic_bp }}" placeholder="e.g. 120">
+                    </div>
+                    <div class="risk-field">
+                        <label for="glucose">Glucose Level (mg/dL)</label>
+                        <input id="glucose" name="glucose" type="number" min="30" max="600" required value="{{ form_data.glucose }}" placeholder="e.g. 95">
+                    </div>
+                    <div class="risk-field">
+                        <label for="exercise_days">Exercise Days per Week</label>
+                        <select id="exercise_days" name="exercise_days" required>
+                            {% for day in range(0, 8) %}
+                            <option value="{{ day }}" {% if form_data.exercise_days|string == day|string %}selected{% endif %}>{{ day }} day{% if day != 1 %}s{% endif %}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="risk-field">
+                        <label for="smoking">Do you smoke?</label>
+                        <select id="smoking" name="smoking" required>
+                            <option value="0" {% if form_data.smoking == "0" %}selected{% endif %}>No</option>
+                            <option value="1" {% if form_data.smoking == "1" %}selected{% endif %}>Yes</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="risk-submit" type="submit">Analyze Health Risk</button>
+            </form>
+
+            {% if result %}
+            <div class="result-card" aria-live="polite">
+                <h4>Prediction Result</h4>
+                <p style="margin:0 0 8px;color:#526a7c;font-size:13px;">Demonstration risk category</p>
+                <span class="risk-result risk-{{ result.risk|lower }}">{{ result.risk }} Risk</span>
+                <div class="result-metrics">
+                    <div class="result-metric">
+                        <span>Model confidence</span>
+                        <strong>{{ result.confidence }}%</strong>
+                    </div>
+                    <div class="result-metric">
+                        <span>Demo test accuracy</span>
+                        <strong>{{ result.model_accuracy }}%</strong>
+                    </div>
+                </div>
+                <div class="risk-disclaimer">This is an educational demonstration using synthetic sample data. It is not medically validated and must not be used for diagnosis or treatment decisions. Consult a qualified healthcare professional for medical advice.</div>
+            </div>
+            {% endif %}
+        </section>
+
+        <aside>
+            <section class="risk-card">
+                <h3>About This Tool</h3>
+                <p class="risk-subtitle" style="margin-bottom:14px;">This project uses a Random Forest machine-learning model to demonstrate classification.</p>
+                <div class="risk-disclaimer" style="margin-top:0;">The result is a model-generated category, not a medical diagnosis. Confidence and demo accuracy do not indicate clinical reliability.</div>
+            </section>
+
+            <section class="risk-card risk-history">
+                <h3>Recent Predictions</h3>
+                <p class="risk-subtitle">Your five most recent saved results.</p>
+                {% if prediction_history %}
+                    {% for item in prediction_history %}
+                    <div class="history-row">
+                        <div>
+                            <strong>{{ item.risk }} Risk</strong>
+                            <span class="history-date">
+                                {% if item.created_at %}{{ item.created_at.strftime('%d %b %Y, %I:%M %p') }}{% else %}Date unavailable{% endif %}
+                            </span>
+                        </div>
+                        <span class="risk-result risk-{{ item.risk|lower }}">{{ item.confidence }}%</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-history">No predictions saved yet. Submit the form to create your first result.</p>
+                {% endif %}
+            </section>
+        </aside>
+    </div>
+</div>
+{% endblock %}

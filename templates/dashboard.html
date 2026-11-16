@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - HealthCare{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div>
+        <div class="section-label">OVERVIEW</div>
+        <h2>Welcome back, {{ user.get('name', 'User') }}</h2>
+        <p>Here's an overview of your personal healthcare information.</p>
+    </div>
+    <div class="status-text"><span class="status-dot"></span> Account Active</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon">♙</div><span class="badge">Active</span></div>
+        <div class="stat-value">100%</div><h3>Profile</h3><p>Your personal account profile is active.</p>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon">▣</div></div>
+        <div class="stat-value">{{ total_records }}</div><h3>Health Records</h3><p>Medical records saved to your account.</p>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon">▤</div></div>
+        <div class="stat-value">{{ total_reports }}</div><h3>Reports</h3><p>Medical, lab and diagnostic reports.</p>
+    </div>
+    <div class="stat-card">
+        <div class="stat-top"><div class="stat-icon">✓</div><span class="badge">Secure</span></div>
+        <div class="stat-value">{{ total_documents }}</div><h3>Documents</h3><p>Uploaded healthcare documents.</p>
+    </div>
+</div>
+
+<div class="quick-grid">
+    <div class="card">
+        <div class="card-header"><div><h3>Quick Access</h3><p>Manage your healthcare information</p></div></div>
+        <div class="quick-list">
+            <a class="quick-item" href="{{ url_for('profile') }}"><div class="quick-icon">♙</div><div class="quick-copy"><strong>My Profile</strong><span>View and update personal details</span></div><span class="arrow">→</span></a>
+            <a class="quick-item" href="{{ url_for('health_records') }}"><div class="quick-icon">▣</div><div class="quick-copy"><strong>Health Records</strong><span>Add, view, edit and manage records</span></div><span class="arrow">→</span></a>
+            <a class="quick-item" href="{{ url_for('reports') }}"><div class="quick-icon">▤</div><div class="quick-copy"><strong>Reports</strong><span>View a summary of your records</span></div><span class="arrow">→</span></a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><div><h3>Account Information</h3><p>Your registered account details</p></div></div>
+        <div class="detail-list">
+            <div class="detail-row"><span>Full Name</span><strong>{{ user.get('name', 'User') }}</strong></div>
+            <div class="detail-row"><span>Email Address</span><strong>{{ user.get('email', '') }}</strong></div>
+            <div class="detail-row"><span>Account Status</span><strong class="status-text">● Active</strong></div>
+            <div class="detail-row"><span>Security</span><strong>✓ Protected</strong></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

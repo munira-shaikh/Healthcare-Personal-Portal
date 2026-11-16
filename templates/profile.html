@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Profile - HealthCare{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div><div class="section-label">PERSONAL ACCOUNT</div><h2>My Profile</h2><p>Manage your personal information and account security.</p></div>
+    <div class="status-text"><span class="status-dot"></span> Account Active</div>
+</div>
+
+<div class="profile-grid">
+    <div class="card profile-card">
+        <div class="profile-avatar">{{ user.get('name', 'U')[0]|upper }}</div>
+        <h3>{{ user.get('name', 'User') }}</h3>
+        <div class="email">{{ user.get('email', '') }}</div>
+        <div style="margin-top:12px"><span class="badge">● Active Account</span></div>
+        <div class="profile-divider"></div>
+        <div class="profile-info-row"><span>Account Type</span><strong>Personal</strong></div>
+        <div class="profile-info-row"><span>Security</span><strong>Protected</strong></div>
+        <div class="profile-info-row"><span>Portal</span><strong>HealthCare</strong></div>
+    </div>
+
+    <div class="profile-main">
+        <div class="card">
+            <div class="card-header"><div><h3>Personal Information</h3><p>Update your registered account information.</p></div></div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile') }}">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Full Name</label><input type="text" name="name" value="{{ user.get('name', '') }}" required></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" name="email" value="{{ user.get('email', '') }}" required></div>
+                    </div>
+                    <div class="form-actions"><button class="btn btn-primary" type="submit">Save Changes →</button></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><div><h3>Change Password</h3><p>Keep your account secure with a strong password.</p></div></div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('change_password') }}">
+                    <div class="form-grid">
+                        <div class="form-group full"><label>Current Password</label><input type="password" name="current_password" required></div>
+                        <div class="form-group"><label>New Password</label><input type="password" name="new_password" minlength="6" required><small class="form-help">Minimum 6 characters.</small></div>
+                        <div class="form-group"><label>Confirm New Password</label><input type="password" name="confirm_password" minlength="6" required></div>
+                    </div>
+                    <div class="form-actions"><button class="btn btn-primary" type="submit">Update Password →</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

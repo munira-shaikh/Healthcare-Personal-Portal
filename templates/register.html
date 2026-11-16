@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account - HealthCare</title>
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <!-- =========================================
+         LEFT SIDE
+         ========================================= -->
+
+    <div class="auth-left">
+
+        <div class="brand-area">
+
+            <div class="brand-logo">
+                H
+            </div>
+
+            <div class="brand-text">
+                <h2>HealthCare</h2>
+                <span>Personal Portal</span>
+            </div>
+
+        </div>
+
+
+        <div class="welcome-area">
+
+            <span class="section-label">
+                GET STARTED
+            </span>
+
+            <h1>
+                Create your
+                <span>account</span>
+            </h1>
+
+            <p>
+                Join HealthCare and manage your personal
+                healthcare information securely in one place.
+            </p>
+
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Secure Access</strong>
+                        <span>Your account is protected.</span>
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Simple & Fast</strong>
+                        <span>Manage your information easily.</span>
+                    </div>
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <div class="feature-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Private</strong>
+                        <span>Your information stays protected.</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="auth-footer">
+            © 2026 HealthCare. All rights reserved.
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         RIGHT SIDE
+         ========================================= -->
+
+    <div class="auth-right">
+
+        <div class="form-container">
+
+            <!-- Brand for mobile -->
+            <div class="mobile-brand">
+
+                <div class="mobile-logo">
+                    H
+                </div>
+
+                <div>
+                    <strong>HealthCare</strong>
+                    <span>Personal Portal</span>
+                </div>
+
+            </div>
+
+
+            <div class="form-header">
+
+                <span class="section-label">
+                    CREATE ACCOUNT
+                </span>
+
+                <h2>
+                    Register
+                </h2>
+
+                <p>
+                    Create your account to get started
+                </p>
+
+            </div>
+
+
+            <!-- =====================================
+                 FLASH MESSAGES
+                 ===================================== -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <!-- =====================================
+                 REGISTER FORM
+                 ===================================== -->
+
+            <form method="POST"
+                  action="{{ url_for('register') }}"
+                  class="auth-form">
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            👤
+                        </span>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            @
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('password', this)"
+                            aria-label="Show password"
+                        >
+                            ◉
+                        </button>
+
+                    </div>
+
+                    <small class="input-hint">
+                        Password must be at least 6 characters.
+                    </small>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="confirm_password">
+                        Confirm Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Confirm your password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('confirm_password', this)"
+                            aria-label="Show password"
+                        >
+                            ◉
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TERMS -->
+
+                <div class="terms-row">
+
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        required
+                    >
+
+                    <label for="terms">
+                        I agree to the
+                        <a href="#" onclick="return false;">
+                            Terms & Conditions
+                        </a>
+                    </label>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="auth-button"
+                >
+                    Create Account
+                    <span>→</span>
+                </button>
+
+
+            </form>
+
+
+            <!-- LOGIN LINK -->
+
+            <div class="account-link">
+
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Sign In
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="security-note">
+
+                <span>🔒</span>
+
+                <div>
+                    <strong>Your information is secure</strong>
+                    <small>
+                        We keep your account information protected.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     PASSWORD TOGGLE
+     ========================================= -->
+
+<script>
+
+function togglePassword(inputId, button) {
+
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+
+        input.type = "text";
+        button.textContent = "◎";
+
+    } else {
+
+        input.type = "password";
+        button.textContent = "◉";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>

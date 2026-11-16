@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}View Health Record - HealthCare{% endblock %}
+{% block page_title %}View Health Record{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="section-label">HEALTH RECORDS</div><h2>{{ record.get('record_type', 'Health Record') }}</h2><p>View the complete information saved for this record.</p></div><a class="btn btn-secondary" href="{{ url_for('health_records') }}">← Back to Records</a></div>
+
+<div class="card">
+    <div class="card-header"><div><h3>Record Details</h3><p>Saved healthcare information</p></div><span class="badge">Secure Record</span></div>
+    <div class="card-body">
+        <div class="record-summary">
+            <div class="summary-box"><span>Record Type</span><strong>{{ record.get('record_type', '-') }}</strong></div>
+            <div class="summary-box"><span>Date</span><strong>{{ record.get('record_date', '-') }}</strong></div>
+            <div class="summary-box"><span>Doctor</span><strong>{{ record.get('doctor') or 'Not specified' }}</strong></div>
+            <div class="summary-box"><span>Hospital / Clinic</span><strong>{{ record.get('hospital') or 'Not specified' }}</strong></div>
+        </div>
+        <div class="notes-box"><h4>Notes</h4><p>{{ record.get('notes') or 'No notes were added for this record.' }}</p></div>
+        {% if record.get('stored_filename') %}<div class="document-box"><div><strong>{{ record.get('document_name', 'Attached document') }}</strong><span>Saved with this health record.</span></div><a class="btn btn-primary btn-small" href="{{ url_for('health_record_document', record_id=record['_id']) }}" target="_blank">Open Document</a></div>{% endif %}
+        <div class="form-actions" style="margin-top:22px"><a class="btn btn-secondary" href="{{ url_for('health_records') }}">Back</a><a class="btn btn-primary" href="{{ url_for('edit_health_record', record_id=record['_id']) }}">Edit Record →</a></div>
+    </div>
+</div>
+{% endblock %}

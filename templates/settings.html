@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Settings - HealthCare{% endblock %}
+{% block page_title %}Settings{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="section-label">ACCOUNT</div><h2>Settings</h2><p>Manage basic account and portal preferences.</p></div></div>
+
+<div class="settings-grid">
+    <div class="card">
+        <div class="card-header"><div><h3>Account Settings</h3><p>Your current account configuration.</p></div></div>
+        <div class="card-body">
+            <div class="settings-item"><div><strong>Account Status</strong><p>Your account is ready to use.</p></div><span class="badge">Active</span></div>
+            <div class="settings-item"><div><strong>Account Type</strong><p>Personal healthcare account.</p></div><span class="info-pill">Personal</span></div>
+            <div class="settings-item"><div><strong>Security</strong><p>Your password is stored securely as a hash.</p></div><span class="badge">Protected</span></div>
+            <div class="settings-item"><div><strong>Email</strong><p>{{ user.get('email', '') }}</p></div><a class="info-pill" href="{{ url_for('profile') }}">Edit Profile</a></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><div><h3>Portal Information</h3><p>About your HealthCare personal portal.</p></div></div>
+        <div class="card-body">
+            <div class="settings-item"><div><strong>Health Records</strong><p>Store and manage medical records and documents.</p></div><a class="info-pill" href="{{ url_for('health_records') }}">Open</a></div>
+            <div class="settings-item"><div><strong>Reports</strong><p>View record counts and a healthcare summary.</p></div><a class="info-pill" href="{{ url_for('reports') }}">Open</a></div>
+            <div class="settings-item"><div><strong>Password</strong><p>Change your password from your profile page.</p></div><a class="info-pill" href="{{ url_for('profile') }}">Manage</a></div>
+            <div class="settings-item"><div><strong>Logout</strong><p>End your current portal session.</p></div><a class="btn btn-danger btn-small" href="{{ url_for('logout') }}">Logout</a></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

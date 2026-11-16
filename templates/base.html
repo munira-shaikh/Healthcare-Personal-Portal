@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HealthCare - Personal Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<div class="portal-shell">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo">H</div>
+            <div>
+                <div class="brand-name">HealthCare</div>
+                <div class="brand-subtitle">Personal Portal</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">MAIN MENU</div>
+            <a href="{{ url_for('dashboard') }}" class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                <span class="nav-icon">⌂</span><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint in ['profile', 'change_password'] %}active{% endif %}">
+                <span class="nav-icon">♙</span><span>Profile</span>
+            </a>
+            <a href="{{ url_for('health_records') }}" class="nav-item {% if request.endpoint in ['health_records', 'add_health_record', 'view_health_record', 'edit_health_record'] %}active{% endif %}">
+                <span class="nav-icon">▣</span><span>Health Records</span>
+            </a>
+            <a href="{{ url_for('health_risk_prediction') }}" class="nav-item {% if request.endpoint == 'health_risk_prediction' %}active{% endif %}">
+                <span class="nav-icon">✚</span><span>Health Risk Prediction</span>
+            </a>
+
+            <a href="{{ url_for('reports') }}" class="nav-item {% if request.endpoint == 'reports' %}active{% endif %}">
+                <span class="nav-icon">▤</span><span>Reports</span>
+            </a>
+
+            <div class="nav-section-title account-title">ACCOUNT</div>
+            <a href="{{ url_for('settings') }}" class="nav-item {% if request.endpoint == 'settings' %}active{% endif %}">
+                <span class="nav-icon">⚙</span><span>Settings</span>
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav-item logout-item">
+                <span class="nav-icon">↪</span><span>Logout</span>
+            </a>
+        </nav>
+
+        <div class="secure-box">
+            <div class="secure-check">✓</div>
+            <div>
+                <strong>Secure Account</strong>
+                <p>Your information is protected.</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-area">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-button" type="button" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+                <div>
+                    <div class="header-label">PERSONAL ACCOUNT</div>
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+            </div>
+
+            <div class="header-user">
+                <div class="header-avatar">{{ user.get('name', 'U')[0]|upper }}</div>
+                <div class="header-user-text">
+                    <strong>{{ user.get('name', 'User') }}</strong>
+                    <span>Personal Account</span>
+                </div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-wrap">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <span>{{ '✓' if category == 'success' else '!' }}</span>
+                            <div>{{ message }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section class="page-content">
+            {% block content %}{% endblock %}
+        </section>
+
+        <footer class="portal-footer">
+            <span>© 2026 HealthCare. All rights reserved.</span>
+            <span>Your information is securely protected.</span>
+        </footer>
+    </main>
+</div>
+
+<script>
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+window.addEventListener('resize', function () {
+    if (window.innerWidth > 900) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('show');
+    }
+});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

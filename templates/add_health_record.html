@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Add Health Record - HealthCare{% endblock %}
+{% block page_title %}Add Health Record{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="section-label">HEALTH RECORDS</div><h2>Add Health Record</h2><p>Save medical information securely to your personal healthcare portal.</p></div><a class="btn btn-secondary" href="{{ url_for('health_records') }}">← Back to Records</a></div>
+
+<div class="card form-card">
+    <div class="card-header"><div><h3>Record Information</h3><p>Enter the details of your medical record.</p></div></div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('add_health_record') }}" enctype="multipart/form-data">
+            <div class="form-grid">
+                <div class="form-group"><label>Record Type *</label><select name="record_type" required><option value="">Select record type</option>{% for item in record_types %}<option value="{{ item }}">{{ item }}</option>{% endfor %}</select></div>
+                <div class="form-group"><label>Record Date *</label><input type="date" name="record_date" required></div>
+                <div class="form-group"><label>Doctor / Specialist</label><input type="text" name="doctor" placeholder="Enter doctor name"></div>
+                <div class="form-group"><label>Hospital / Clinic</label><input type="text" name="hospital" placeholder="Enter hospital or clinic name"></div>
+                <div class="form-group full"><label>Notes</label><textarea name="notes" placeholder="Enter diagnosis, treatment, medicines or any additional information..."></textarea></div>
+                <div class="form-group full"><label>Upload Document</label><input type="file" name="document" accept=".pdf,.jpg,.jpeg,.png"><small class="form-help">Optional. Allowed: PDF, JPG, JPEG, PNG. Maximum 10 MB.</small></div>
+            </div>
+            <div class="form-actions"><a class="btn btn-secondary" href="{{ url_for('health_records') }}">Cancel</a><button class="btn btn-primary" type="submit">Save Health Record →</button></div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Reports - HealthCare{% endblock %}
+{% block page_title %}Reports{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="section-label">HEALTHCARE SUMMARY</div><h2>Reports</h2><p>Review a simple overview of your saved healthcare records.</p></div><a class="btn btn-primary" href="{{ url_for('health_records') }}">View Health Records →</a></div>
+
+<div class="report-grid">
+    <div class="stat-card"><div class="stat-icon">▣</div><div class="report-number" style="margin-top:17px">{{ total_records }}</div><div class="report-label">Total Health Records</div></div>
+    <div class="stat-card"><div class="stat-icon">▤</div><div class="report-number" style="margin-top:17px">{{ medical_reports + lab_reports + diagnostic_reports }}</div><div class="report-label">Medical & Diagnostic Reports</div></div>
+    <div class="stat-card"><div class="stat-icon">♙</div><div class="report-number" style="margin-top:17px">{{ doctor_visits }}</div><div class="report-label">Doctor Visits</div></div>
+</div>
+
+<div class="card">
+    <div class="card-header"><div><h3>Record Breakdown</h3><p>Distribution of the records currently stored in your account.</p></div></div>
+    <div class="card-body">
+        {% set breakdown = [('Medical Report', medical_reports), ('Lab Report', lab_reports), ('Diagnostic Report', diagnostic_reports), ('Doctor Visit', doctor_visits), ('Prescription', prescriptions), ('Vaccination', vaccination_records)] %}
+        {% for label, count in breakdown %}
+            <div style="margin-bottom:20px"><div style="display:flex;justify-content:space-between;gap:15px;font-size:12px;color:#58798d;font-weight:700"><span>{{ label }}</span><strong style="color:#063a61">{{ count }}</strong></div><div class="progress-line"><span style="width:{{ ((count / total_records) * 100) if total_records else 0 }}%"></span></div></div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card" style="margin-top:20px">
+    <div class="card-header"><div><h3>Recent Records</h3><p>Your latest saved health information.</p></div></div>
+    {% if records %}
+    <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Type</th><th>Date</th><th>Doctor</th><th>Action</th></tr></thead><tbody>
+        {% for record in records[:8] %}<tr><td class="record-type">{{ record.get('record_type', '-') }}</td><td class="record-date">{{ record.get('record_date', '-') }}</td><td>{{ record.get('doctor') or 'Not specified' }}</td><td><a class="btn btn-secondary btn-small" href="{{ url_for('view_health_record', record_id=record['_id']) }}">View</a></td></tr>{% endfor %}
+    </tbody></table></div>
+    {% else %}<div class="empty-state"><div class="empty-icon">▤</div><h3>No Report Data Yet</h3><p>Add health records and your report summary will appear here.</p><a class="btn btn-primary" href="{{ url_for('add_health_record') }}">Add Health Record</a></div>{% endif %}
+</div>
+{% endblock %}

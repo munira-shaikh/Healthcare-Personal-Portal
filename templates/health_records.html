@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Health Records - HealthCare{% endblock %}
+{% block page_title %}Health Records{% endblock %}
+{% block content %}
+<div class="page-heading">
+    <div><div class="section-label">HEALTHCARE INFORMATION</div><h2>Health Records</h2><p>Securely manage your medical information in one place.</p></div>
+    <a class="btn btn-primary" href="{{ url_for('add_health_record') }}">+ Add Health Record</a>
+</div>
+
+<div class="record-summary">
+    <div class="summary-box"><span>Total Records</span><strong>{{ records|length }}</strong></div>
+    <div class="summary-box"><span>Documents</span><strong>{{ document_count }}</strong></div>
+    <div class="summary-box"><span>Doctor Visits</span><strong>{{ records|selectattr('record_type', 'equalto', 'Doctor Visit')|list|length }}</strong></div>
+    <div class="summary-box"><span>Reports</span><strong>{{ records|selectattr('record_type', 'in', ['Medical Report', 'Lab Report', 'Diagnostic Report'])|list|length }}</strong></div>
+</div>
+
+<div class="card">
+    <div class="card-header"><div><h3>Saved Health Records</h3><p>Your healthcare information is linked to your personal account.</p></div><span class="badge">{{ records|length }} Records</span></div>
+    {% if records %}
+    <div class="records-table-wrap">
+        <table class="records-table">
+            <thead><tr><th>Type</th><th>Date</th><th>Doctor</th><th>Hospital / Clinic</th><th>Document</th><th>Actions</th></tr></thead>
+            <tbody>
+            {% for record in records %}
+                <tr>
+                    <td><span class="record-type">{{ record.get('record_type', '-') }}</span></td>
+                    <td><span class="record-date">{{ record.get('record_date', '-') }}</span></td>
+                    <td>{{ record.get('doctor') or 'Not specified' }}</td>
+                    <td>{{ record.get('hospital') or 'Not specified' }}</td>
+                    <td>{% if record.get('stored_filename') %}<a class="btn btn-secondary btn-small" href="{{ url_for('health_record_document', record_id=record['_id']) }}" target="_blank">View File</a>{% else %}<span style="color:#8ba2b1">None</span>{% endif %}</td>
+                    <td><div class="record-actions"><a class="btn btn-secondary btn-small" href="{{ url_for('view_health_record', record_id=record['_id']) }}">View</a><a class="btn btn-secondary btn-small" href="{{ url_for('edit_health_record', record_id=record['_id']) }}">Edit</a><form method="POST" action="{{ url_for('delete_health_record', record_id=record['_id']) }}" onsubmit="return confirm('Delete this health record?');"><button class="btn btn-danger btn-small" type="submit">Delete</button></form></div></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state"><div class="empty-icon">▣</div><h3>No Health Records Yet</h3><p>Add your first medical record to start building your personal healthcare history.</p><a class="btn btn-primary" href="{{ url_for('add_health_record') }}">+ Add Your First Record</a></div>
+    {% endif %}
+</div>
+{% endblock %}
